@@ -24,7 +24,7 @@ objPos::objPos(int xPos, int yPos, char sym)
 //Destructor Implemented
 objPos::~objPos()
 {
-    delete pos;
+    delete[] pos;
 }
 
 //Copy Constructor Implemented
@@ -41,7 +41,7 @@ objPos& objPos::operator=(const objPos& o)
 {
     if(this != &o)
     {
-        delete pos;
+        delete[] pos;
 
         pos = new Pos;
         pos->x = o.pos->x;

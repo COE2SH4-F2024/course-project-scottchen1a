@@ -7,16 +7,18 @@ Player::Player(GameMechs* thisGMRef)
     playerPos = new objPos;
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
-    player.x = 10;
-    player.y = 5;
-    player.symbol = '*';
+    objPos playerPos(10, 5, '*');
+    // playerPos.pos->x = 10;
+    // playerPos.pos->y = 5;
+    // player.symbol = '*';
     // more actions to be included
 }
 
 
 Player::~Player()
 {
-    delete playerPos;
+    delete[] mainGameMechsRef;
+    //delete[] playerPos;
     // delete any heap members here
 }
 
@@ -37,6 +39,7 @@ void Player::updatePlayerDir()
             case ' ':  // exit
                 // lose = 1;
                 // exitFlag = 1;
+                mainGameMechsRef->setExitTrue();
                 break;
             case 'w':
             {
@@ -84,46 +87,46 @@ void Player::movePlayer()
     switch(myDir)
     {
         case UP:
-            if(player.y == 1)
+            if(playerPos.pos->y == 1)
             {
-                player.y = mainGameMechsRef->getBoardSizeY - 1;
+                playerPos.pos->y = mainGameMechsRef->getBoardSizeY() - 2;
             }
             else
             {
-                player.y--;
+                playerPos.pos->y--;
             }
             break;
 
         case DOWN:
-            if(player.y == mainGameMechsRef->getBoardSizeY - 1)
+            if(playerPos.pos->y == mainGameMechsRef->getBoardSizeY() - 2)
             {
-                player.y = 1;
+                playerPos.pos->y = 1;
             }
             else
             {
-                player.y++;
+                playerPos.pos->y++;
             }
             break;
         
         case LEFT:
-            if(player.x == 1)
+            if(playerPos.pos->x == 1)
             {
-                player.x = mainGameMechsRef->getBoardSizeX - 1;
+                playerPos.pos->x = mainGameMechsRef->getBoardSizeX() - 2;
             }
             else
             {
-                player.x--;
+                playerPos.pos->x--;
             }
             break;
 
         case RIGHT:
-            if(player.x == mainGameMechsRef->getBoardSizeX - 1)
+            if(playerPos.pos->x == mainGameMechsRef->getBoardSizeX() - 2)
             {
-                player.x = 1;
+                playerPos.pos->x = 1;
             }
             else
             {
-                player.x++;
+                playerPos.pos->x++;
             }
             break;
     }
