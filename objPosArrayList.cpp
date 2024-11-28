@@ -1,19 +1,16 @@
 #include "objPosArrayList.h"
-
-// Paste your Tested implementation here.
-// Paste your Tested implementation here.
-// Paste your Tested implementation here.
+#define ARRAY_MAX_CAP 200
 
 objPosArrayList::objPosArrayList()
 {
-    aList = new objPos[arrayCapacity];
-    listSize = 0; 
-    arrayCapacity = 200;
+    aList = new objPos[ARRAY_MAX_CAP];
+    listSize = 0;
 }
 
 objPosArrayList::~objPosArrayList()
 {
-    delete[] aList;
+    if (aList)
+        delete[] aList;
 }
 
 int objPosArrayList::getSize() const
@@ -23,14 +20,15 @@ int objPosArrayList::getSize() const
 
 void objPosArrayList::insertHead(objPos thisPos)
 {
-    if(listSize == arrayCapacity)
+    if (listSize == ARRAY_MAX_CAP)
     {
+        // Optionally resize the array here
         return;
     }
 
-    for(int i = listSize; i > 0; i--)
+    for (int i = listSize; i > 0; i--)
     {
-        aList[i] = aList [i-1];
+        aList[i] = aList[i - 1];
     }
     aList[0] = thisPos;
     listSize++;
@@ -38,8 +36,9 @@ void objPosArrayList::insertHead(objPos thisPos)
 
 void objPosArrayList::insertTail(objPos thisPos)
 {
-    if(listSize == arrayCapacity)
+    if (listSize == ARRAY_MAX_CAP)
     {
+        // Optionally resize the array here
         return;
     }
 
@@ -49,12 +48,12 @@ void objPosArrayList::insertTail(objPos thisPos)
 
 void objPosArrayList::removeHead()
 {
-    if(listSize == 0)
+    if (listSize == 0)
     {
         return;
     }
 
-    for(int i = 0; i < listSize - 1; i++)
+    for (int i = 0; i < listSize - 1; i++)
     {
         aList[i] = aList[i + 1];
     }
@@ -64,7 +63,7 @@ void objPosArrayList::removeHead()
 
 void objPosArrayList::removeTail()
 {
-    if(listSize == 0)
+    if (listSize == 0)
     {
         return;
     }
@@ -74,15 +73,21 @@ void objPosArrayList::removeTail()
 
 objPos objPosArrayList::getHeadElement() const
 {
-    return aList[0];
+    if (listSize > 0)
+        return aList[0];
+    return objPos();
 }
 
 objPos objPosArrayList::getTailElement() const
 {
-    return aList[listSize];
+    if (listSize > 0)
+        return aList[listSize - 1];
+    return objPos();
 }
 
 objPos objPosArrayList::getElement(int index) const
 {
-    return aList[index];
+    if ((index >= 0) && (index < listSize))
+        return aList[index];
+    return objPos();
 }

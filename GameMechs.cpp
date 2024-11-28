@@ -19,9 +19,6 @@ GameMechs::GameMechs(int boardX, int boardY)
     exitFlag = 0;
     loseFlag = 0;
     score = 0;
-
-        
-    
 }
 
 // do you need a destructor?

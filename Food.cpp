@@ -36,7 +36,7 @@ void Food::generateFood(const objPos& blockOff)
         randX = (rand() % maxX -2)+1;
         randY = (rand() % maxY -2)+1;
 
-        if(!(blockOff.pos->x == randX) && (blockOff.pos->y == randY))
+        if(!(blockOff.pos->x == randX) && !(blockOff.pos->y == randY))
         {
             valid = true;
         }
