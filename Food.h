@@ -6,6 +6,7 @@
 
 #include "objPos.h"
 #include "objPosArrayList.h"
+#include "GameMechs.h"
 
 using namespace std;
 
@@ -15,16 +16,17 @@ class Food
     
     objPos foodPos;
 
+    GameMechs currentMech;
+
     public:
 
-    //CONSTRUCTORS AND DESTRUCTORS
-    Food();
-    Food(int num);
+    //CONSTRUCTOR AND DESTRUCTOR
+    Food(GameMechs *CurrentMech);
     ~Food();
     //---------------------------
 
 
-    void generateFood(objPos blockOff);
+    void generateFood(const objPos& blockOff);
     objPos getFoodPos() const;
     void seed();
 
