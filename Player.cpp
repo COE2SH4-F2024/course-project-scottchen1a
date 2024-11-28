@@ -22,6 +22,27 @@ Player::~Player()
     // delete any heap members here
 }
 
+
+
+
+//add copy constructor and assignment operator
+
+// //Copy Constructor
+// Player::Player(const Player& p)
+// {
+//     playerPos = new objPos;
+
+// }
+
+// //Copy Assignment Operator
+// Player& Player::operator=(const Player& p)
+// {
+
+// }
+
+
+
+
 objPos Player::getPlayerPos() const
 {
     return playerPos;
