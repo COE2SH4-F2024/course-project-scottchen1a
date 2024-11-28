@@ -21,7 +21,7 @@ GameMechs::GameMechs(int boardX, int boardY)
     score = 0;
 }
 
-// do you need a destructor?
+// d o you need a destructor?
 GameMechs::~GameMechs()
 {
     

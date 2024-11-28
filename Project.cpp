@@ -53,8 +53,7 @@ void Initialize(void)
     board = new GameMechs();
     p = new Player(board);
     f = new Food(board);
-    p->drawPlayer();
-    f->generateFood(p->getPlayerPos())
+    f->generateFood(p->getPlayerPos());
 
     // exitFlag = false;
 }
@@ -91,7 +90,7 @@ void RunLogic(void)
             break;
     }
     p->movePlayer();
-    p->drawPlayer();
+    //p->drawPlayer();
     board->clearInput();
 }
 
@@ -100,17 +99,21 @@ void DrawScreen(void)
     MacUILib_clearScreen();    
 
     int xBoundary = board->getBoardSizeX();
-    int yBoundary = board->getBoardsizeY();
+    int yBoundary = board->getBoardSizeY();
     int i, j;
 
-    for(i = 0; i < yBoundary; i++)
-    {
-        for(j = 0; j < xBoundary; j++)
-        {
-            MacUILib_printf("%c", board->getBoard(i,j));
-        }
-        MacUILib_printf
-    }
+    // for(i = 0; i < yBoundary; i++)
+    // {
+    //     for(j = 0; j < xBoundary; j++)
+    //     {
+    //         MacUILib_printf("%c", board->getBoard(i,j));
+    //     }
+    //     MacUILib_printf("\n");
+    // }
+    MacUILib_printf("W = Up, A = Left, S = Down, D = Right, SPACE = Stop");
+    MacUILib_printf("\nScore: %d", board->getScore());
+    //MacUILib_printf("\nDirection: %d", p->getDirection());
+    MacUILib_printf("\nFood Position: %d %d", f->getFoodPos().pos->x, f->getFoodPos().pos->y);
 }
 
 void LoopDelay(void)
@@ -124,4 +127,7 @@ void CleanUp(void)
     MacUILib_clearScreen();    
 
     MacUILib_uninit();
+    delete p;
+    delete f;
+    delete board;
 }
