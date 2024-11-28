@@ -4,7 +4,7 @@
 
 Player::Player(GameMechs* thisGMRef)
 {
-    playerPos = new objPos;
+    playerPos = objPos();
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
     objPos playerPos(10, 5, '*');
