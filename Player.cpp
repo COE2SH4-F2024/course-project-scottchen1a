@@ -150,6 +150,8 @@ void Player::movePlayer()
                 playerPos.pos->x++;
             }
             break;
+        case(STOP):
+            break;
     }
    
     // PPA3 Finite State Machine logic
