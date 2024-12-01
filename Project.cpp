@@ -94,6 +94,8 @@ void RunLogic(void)
         board->incrementScore();
         p->addLength();
 
+        f->generateFood(p->getPlayerPos());
+
     }
 
     board->clearInput();
