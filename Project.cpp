@@ -25,6 +25,7 @@ GameMechs *board;
 Player *p;
 Food *f;
 
+char **gameBoard = NULL;
 
 
 int main(void)
@@ -50,70 +51,158 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
+    //Creates all objects needed for runtime on the heap
     board = new GameMechs();
-    p = new Player(board);
     f = new Food(board);
+    p = new Player(board,f);
     f->generateFood(p->getPlayerPos());
+    //---------------------
 
-    // exitFlag = false;
+    //Makes an array for the gameboard depening on the constuctor used
+    board->makeGameBoard(gameBoard);
+    //-----------------------
+
 }
 
 void GetInput(void)
 {
-    if(MacUILib_hasChar())
+    int tempInp = 0;
+    if (MacUILib_hasChar())
     {
-        board->setInput(MacUILib_getChar());
+        tempInp = MacUILib_getChar();
     }
-    else
-    {
-        board->setInput(0);
-    }
+    board->setInput(tempInp);
 }
 
 void RunLogic(void)
 {
     switch(board->getInput())
     {
-        case 0:
-            break;
-        case ' ':
-            board->setExitTrue();
-            break;
         case 'q': //debug key for incrementing score
             board->incrementScore();
             break;
         case 'f':
             f->generateFood(p->getPlayerPos());
             break;
-        default:
-            p->updatePlayerDir();
-            break;
     }
+
+    p->updatePlayerDir();
     p->movePlayer();
-    //p->drawPlayer();
+
+    if (p->checkFoodConsumption())
+    {
+        board->incrementScore();
+        p->addLength();
+
+    }
+
     board->clearInput();
+
+    
 }
 
 void DrawScreen(void)
 {
     MacUILib_clearScreen();    
 
-    int xBoundary = board->getBoardSizeX();
-    int yBoundary = board->getBoardSizeY();
-    int i, j;
+    // int xBoundary = board->getBoardSizeX();
+    // int yBoundary = board->getBoardSizeY();
+    // int i, j;
 
-    // for(i = 0; i < yBoundary; i++)
-    // {
-    //     for(j = 0; j < xBoundary; j++)
-    //     {
-    //         MacUILib_printf("%c", board->getBoard(i,j));
-    //     }
-    //     MacUILib_printf("\n");
-    // }
-    MacUILib_printf("W = Up, A = Left, S = Down, D = Right, SPACE = Stop");
+   
+    // MacUILib_printf("W = Up, A = Left, S = Down, D = Right, SPACE = Stop");
+    objPos head = p->getPlayerPos().getHeadElement();
+    objPos food = f->getFoodPos();
+
+    // Debugging
+    MacUILib_printf("Head Position: (%d, %d)\n", head.pos->x, head.pos->y);
+    MacUILib_printf("Food Position: (%d, %d)\n", food.pos->x, food.pos->y);
     MacUILib_printf("\nScore: %d", board->getScore());
-    //MacUILib_printf("\nDirection: %d", p->getDirection());
     MacUILib_printf("\nFood Position: %d %d", f->getFoodPos().pos->x, f->getFoodPos().pos->y);
+    MacUILib_printf("\nPlayer Position : %d %d", p->getPlayerPos().getElement(0).getObjPos().pos->x,p->getPlayerPos().getElement(0).getObjPos().pos->y);
+    MacUILib_printf("\n");
+
+    // Populating Game Board
+    for (int row = 0; row < board->getBoardSizeY(); row++)
+    {
+
+        for (int column = 0; column < board->getBoardSizeX(); column++)
+        {
+
+            if (row == 0 || (row == board->getBoardSizeY() - 1 )) // Header and Footer
+            {
+                gameBoard[row][column] = '#';
+            }
+
+            else if ((column == 0) || (column == board->getBoardSizeX() - 1 )) // Sides
+            {
+                gameBoard[row][column] = '#';
+            }
+
+
+            // Accessing Food Items
+            
+            else if (row == f->getFoodPos().pos->y && column == f->getFoodPos().pos->x) // Player Object
+            {
+                gameBoard[row][column] = f->getFoodPos().getSymbol();
+            }
+
+
+            else // Non Active
+            {
+                gameBoard[row][column] = ' ';
+            }
+
+            for (int i = 0; i < p->getPlayerPos().getSize(); i++) 
+            {                
+               
+                if (row == p->getPlayerPos().getElement(i).pos->y && column == p->getPlayerPos().getElement(i).pos->x) // Player Object
+                {
+                    gameBoard[row][column] = p->getPlayerPos().getElement(i).symbol;
+                }
+
+            }
+
+        }
+    }
+
+
+    // Printing Game Board 
+    for (int row = 0; row < board->getBoardSizeY(); row++)
+    {
+
+        for (int column = 0; column < board->getBoardSizeX(); column++)
+        {
+
+            MacUILib_printf("%c", gameBoard[row][column]);
+        }
+
+        MacUILib_printf("\n");
+    }
+
+
+
+    // UI Information
+
+    // printf("Score: %d\n", body.getSize()-1); // Score
+        
+    // MacUILib_printf("Board Size: 15 x 30 \n");
+
+ 
+    
+    // // Printing Game Loss Condiiton
+    // if(loseFlag == 1)
+    // {
+        
+    //     exitFlag = myGame.getExitFlagStatus();
+    //     MacUILib_clearScreen();
+
+    //     MacUILib_printf("Your Score was: %d\n", body.getSize()-1);
+
+
+    // }
+
+
 }
 
 void LoopDelay(void)
@@ -127,6 +216,17 @@ void CleanUp(void)
     MacUILib_clearScreen();    
 
     MacUILib_uninit();
+    //Deletion of gameboard
+    // Store board dimensions before deleting board
+    int boardSizeY = board->getBoardSizeY();
+
+    // Deletion of gameboard
+    for (int i = 0; i < boardSizeY; i++) 
+    {
+        delete[] gameBoard[i];
+    }
+    delete[] gameBoard;
+
     delete p;
     delete f;
     delete board;

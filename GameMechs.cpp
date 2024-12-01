@@ -40,10 +40,7 @@ bool GameMechs::getLoseFlagStatus() const
 
 char GameMechs::getInput() const
 {
-    if(MacUILib_hasChar())
-    {
-        return MacUILib_getChar();
-    }
+    return input;
 }
 
 int GameMechs::getScore() const
@@ -85,6 +82,17 @@ void GameMechs::setInput(char this_input)
 void GameMechs::clearInput()
 {
     input = 0;
+}
+
+void GameMechs::makeGameBoard(char **&array)
+{
+    array = new char*[boardSizeY];
+    int i;
+
+    for(i = 0; i<(boardSizeY); i++)
+    {
+        array[i] = new char[boardSizeX];
+    }
 }
 
 // More methods should be added here

@@ -1,13 +1,17 @@
 #include "Player.h"
+#include "MacUILib.h"
 
 
 
-Player::Player(GameMechs* thisGMRef)
+
+Player::Player(GameMechs* thisGMRef, Food* food)
 {
-    playerPos = objPos();
+    playerPosList = new objPosArrayList();
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
-    objPos playerPos(10, 5, '*');
+    f = food;
+    headInsert = objPos(15,5,'*');
+    playerPosList->insertHead(headInsert);
     // playerPos.pos->x = 10;
     // playerPos.pos->y = 5;
     // player.symbol = '*';
@@ -17,7 +21,8 @@ Player::Player(GameMechs* thisGMRef)
 
 Player::~Player()
 {
-    delete[] mainGameMechsRef;
+    //delete mainGameMechsRef;
+     
     //delete[] playerPos;
     // delete any heap members here
 }
@@ -43,28 +48,29 @@ Player::~Player()
 
 
 
-objPos Player::getPlayerPos() const
+objPosArrayList& Player::getPlayerPos() const
 {
-    return playerPos;
+    return *playerPosList;
     // return the reference to the playerPos arrray list
 }
 
+int Player::getDirection()
+{
+    return myDir;
+}
 void Player::updatePlayerDir()
 {
-    char input = mainGameMechsRef->getInput();
 
-    if(input != 0)  // if not null character
+    if(mainGameMechsRef->getInput())  // if not null character
     {
-        switch(input)
+        switch(mainGameMechsRef->getInput())
         {                      
             case ' ':  // exit
-                // lose = 1;
-                // exitFlag = 1;
                 mainGameMechsRef->setExitTrue();
                 break;
             case 'w':
             {
-                if(myDir == LEFT || myDir == RIGHT) 
+                if(myDir == LEFT || myDir == RIGHT || myDir == STOP) 
                 {
                     myDir = UP;
                 }
@@ -72,7 +78,7 @@ void Player::updatePlayerDir()
             }
             case 's':
             {
-                if(myDir == LEFT || myDir == RIGHT) 
+                if(myDir == LEFT || myDir == RIGHT || myDir == STOP) 
                 {
                     myDir = DOWN;
                 }
@@ -80,7 +86,7 @@ void Player::updatePlayerDir()
             }
             case 'a':
             {
-                if(myDir == UP || myDir == DOWN) 
+                if(myDir == UP || myDir == DOWN || myDir == STOP) 
                 {
                     myDir = LEFT;
                 }
@@ -88,7 +94,7 @@ void Player::updatePlayerDir()
             }
             case 'd':
             {
-                if(myDir == UP || myDir == DOWN) 
+                if(myDir == UP || myDir == DOWN || myDir == STOP) 
                 {
                     myDir = RIGHT;
                 }
@@ -98,7 +104,6 @@ void Player::updatePlayerDir()
             default:
                 break;
         }
-        input = 0;
     }
         // PPA3 input processing logic          
 }
@@ -108,46 +113,62 @@ void Player::movePlayer()
     switch(myDir)
     {
         case UP:
-            if(playerPos.pos->y == 1)
+            if(playerPosList->getElement(0).pos->y == 1)
             {
-                playerPos.pos->y = mainGameMechsRef->getBoardSizeY() - 2;
+                headInsert = objPos(playerPosList->getElement(0).pos->x,mainGameMechsRef->getBoardSizeY() - 2,'*');
+                playerPosList->insertHead(headInsert);
+                playerPosList->removeTail();
             }
             else
             {
-                playerPos.pos->y--;
+                headInsert = objPos(playerPosList->getElement(0).pos->x,(playerPosList->getElement(0).pos->y)-1,'*');
+                playerPosList->insertHead(headInsert);
+                playerPosList->removeTail();
             }
             break;
 
         case DOWN:
-            if(playerPos.pos->y == mainGameMechsRef->getBoardSizeY() - 2)
-            {
-                playerPos.pos->y = 1;
+            if(playerPosList->getElement(0).pos->y == mainGameMechsRef->getBoardSizeY() - 2)
+            {   
+                headInsert = objPos(playerPosList->getElement(0).pos->x,1,'*');
+                playerPosList->insertHead(headInsert);
+                playerPosList->removeTail();
             }
             else
             {
-                playerPos.pos->y++;
+                headInsert = objPos(playerPosList->getElement(0).pos->x,(playerPosList->getElement(0).pos->y)+1,'*');
+                playerPosList->insertHead(headInsert);
+                playerPosList->removeTail();
             }
             break;
         
         case LEFT:
-            if(playerPos.pos->x == 1)
+            if(playerPosList->getElement(0).pos->x == 1)
             {
-                playerPos.pos->x = mainGameMechsRef->getBoardSizeX() - 2;
+                headInsert = objPos(mainGameMechsRef->getBoardSizeX() - 2,(playerPosList->getElement(0).pos->y),'*');
+                playerPosList->insertHead(headInsert);
+                playerPosList->removeTail();
             }
             else
             {
-                playerPos.pos->x--;
+                headInsert = objPos((playerPosList->getElement(0).pos->x)-1,(playerPosList->getElement(0).pos->y),'*');
+                playerPosList->insertHead(headInsert);
+                playerPosList->removeTail();
             }
             break;
 
         case RIGHT:
-            if(playerPos.pos->x == mainGameMechsRef->getBoardSizeX() - 2)
+            if(playerPosList->getElement(0).pos->x == mainGameMechsRef->getBoardSizeX() - 2)
             {
-                playerPos.pos->x = 1;
+                headInsert = objPos(1,playerPosList->getElement(0).pos->y,'*');
+                playerPosList->insertHead(headInsert);
+                playerPosList->removeTail();
             }
             else
             {
-                playerPos.pos->x++;
+                headInsert = objPos((playerPosList->getElement(0).pos->x)+1,(playerPosList->getElement(0).pos->y),'*');
+                playerPosList->insertHead(headInsert);
+                playerPosList->removeTail();
             }
             break;
         case(STOP):
@@ -156,5 +177,55 @@ void Player::movePlayer()
    
     // PPA3 Finite State Machine logic
 }
+
+bool Player::checkFoodConsumption()
+{
+    bool collision = false;
+
+    if ((playerPosList->getElement(0).pos->x==f->getFoodPos().pos->x) && (playerPosList->getElement(0).pos->y==f->getFoodPos().pos->y))
+    {
+        collision = true;
+    }
+
+    return collision;
+
+}
+
+void Player::addLength()
+{
+    
+    switch(myDir)
+    {
+        case(UP):
+        {
+            headInsert = objPos((playerPosList->getElement(0).pos->x),(playerPosList->getElement(0).pos->y)-1,'*');
+            playerPosList->insertHead(headInsert);
+            break;
+        }
+        case(DOWN):
+        {
+            headInsert = objPos((playerPosList->getElement(0).pos->x),(playerPosList->getElement(0).pos->y)+1,'*');
+            playerPosList->insertHead(headInsert);
+            break;
+        }
+        case(LEFT):
+        {
+            headInsert = objPos((playerPosList->getElement(0).pos->x)-1,(playerPosList->getElement(0).pos->y),'*');
+            playerPosList->insertHead(headInsert);
+                break;
+        }
+        case(RIGHT):
+        {
+            headInsert = objPos((playerPosList->getElement(0).pos->x)+1,(playerPosList->getElement(0).pos->y),'*');
+            playerPosList->insertHead(headInsert);
+            break;
+        }
+        case(STOP):
+            break;
+    }
+
+    
+}
+
 
 // More methods to be added

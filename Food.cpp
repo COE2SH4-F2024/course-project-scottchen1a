@@ -10,7 +10,7 @@ Food::Food(GameMechs *CurrentMech)
 
 Food::~Food()
 {
-    delete foodPos.pos;
+    
 }
 
 
@@ -19,11 +19,12 @@ void Food::seed()
     srand(time(NULL));
 }
 
-void Food::generateFood(const objPos& blockOff)
+void Food::generateFood(const objPosArrayList& blockOff)
 {
     seed();
 
     bool valid = false;
+    int check = 0;
 
     int randX;
     int randY;
@@ -33,14 +34,27 @@ void Food::generateFood(const objPos& blockOff)
 
     while(!valid)
     {
-        randX = (rand() % maxX -2)+1;
-        randY = (rand() % maxY -2)+1;
+        randX = (rand() % (maxX -2))+1;
+        randY = (rand() % (maxY -2))+1;
 
-        if(!(blockOff.pos->x == randX) && !(blockOff.pos->y == randY))
+        for (int i = 0; i < blockOff.getSize(); i++)
+        {
+            if(!(randX == blockOff.getElement(i).getObjPos().pos->x) && !(randY == blockOff.getElement(i).getObjPos().pos->y))
+            {
+                check++;
+            }
+
+        }
+        if(check == blockOff.getSize())
         {
             valid = true;
         }
+
+        
     }
+
+    
+
 
     foodPos.setObjPos(randX,randY,'o');
 

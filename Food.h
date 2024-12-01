@@ -26,7 +26,7 @@ class Food
     //---------------------------
 
 
-    void generateFood(const objPos& blockOff);
+    void generateFood(const objPosArrayList& blockOff);
     objPos getFoodPos() const;
     void seed();
 
