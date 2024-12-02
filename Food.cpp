@@ -5,7 +5,7 @@ Food::Food(GameMechs *CurrentMech)
 {
     seed();
     foodPos = objPos(1,1,'o');
-    currentMech = *CurrentMech;
+    GameMechs* currentMech;
 }
 
 Food::~Food()

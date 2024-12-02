@@ -22,7 +22,8 @@ Player::Player(GameMechs* thisGMRef, Food* food)
 Player::~Player()
 {
     //delete mainGameMechsRef;
-     
+    delete playerPosList; 
+    playerPosList = nullptr;
     //delete[] playerPos;
     // delete any heap members here
 }

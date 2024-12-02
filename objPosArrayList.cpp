@@ -9,8 +9,8 @@ objPosArrayList::objPosArrayList()
 
 objPosArrayList::~objPosArrayList()
 {
-    if (aList)
-        delete[] aList;
+    delete[] aList;
+    //aList = nullptr;
 }
 
 int objPosArrayList::getSize() const

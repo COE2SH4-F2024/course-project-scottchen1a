@@ -24,11 +24,7 @@ objPos::objPos(int xPos, int yPos, char sym)
 //Destructor Implemented
 objPos::~objPos()
 {
-    if(pos)
-    {
-        delete pos;
-    }
-        
+    delete pos;
 }
 
 //Copy Constructor Implemented
@@ -76,7 +72,7 @@ void objPos::setObjPos(int xPos, int yPos, char sym)
 
 objPos objPos::getObjPos() const //what 
 {
-    return objPos(pos->x,pos->y,symbol);
+    return *this;
 }
 
 char objPos::getSymbol() const
