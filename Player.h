@@ -28,6 +28,7 @@ class Player
         int getDirection();
         bool checkFoodConsumption();
         void addLength();
+        bool checkLoss();
 
 
         // More methods to be added here

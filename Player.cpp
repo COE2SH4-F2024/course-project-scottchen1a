@@ -199,33 +199,84 @@ void Player::addLength()
     {
         case(UP):
         {
-            headInsert = objPos((playerPosList->getElement(0).pos->x),(playerPosList->getElement(0).pos->y)-1,'*');
-            playerPosList->insertHead(headInsert);
-            break;
+            if((playerPosList->getElement(0).pos->y) == 1)
+            {
+                headInsert = objPos((playerPosList->getElement(0).pos->x),mainGameMechsRef->getBoardSizeY()-2,'*');
+                playerPosList->insertHead(headInsert);
+                break;
+            }
+            else
+            {
+                headInsert = objPos((playerPosList->getElement(0).pos->x),(playerPosList->getElement(0).pos->y)-1,'*');
+                playerPosList->insertHead(headInsert);
+                break;
+            }
+            
         }
         case(DOWN):
         {
-            headInsert = objPos((playerPosList->getElement(0).pos->x),(playerPosList->getElement(0).pos->y)+1,'*');
-            playerPosList->insertHead(headInsert);
-            break;
+            if((playerPosList->getElement(0).pos->y) == mainGameMechsRef->getBoardSizeY()-2)
+            {
+                headInsert = objPos((playerPosList->getElement(0).pos->x),1,'*');
+                playerPosList->insertHead(headInsert);
+                break;
+            }
+            else
+            {
+                headInsert = objPos((playerPosList->getElement(0).pos->x),(playerPosList->getElement(0).pos->y)+1,'*');
+                playerPosList->insertHead(headInsert);
+                break;
+            }
         }
         case(LEFT):
         {
-            headInsert = objPos((playerPosList->getElement(0).pos->x)-1,(playerPosList->getElement(0).pos->y),'*');
-            playerPosList->insertHead(headInsert);
+            if((playerPosList->getElement(0).pos->x) == 1)
+            {
+                headInsert = objPos((mainGameMechsRef->getBoardSizeX()-2),(playerPosList->getElement(0).pos->y),'*');
+                playerPosList->insertHead(headInsert);
                 break;
+            }
+            else
+            {
+                headInsert = objPos((playerPosList->getElement(0).pos->x)-1,(playerPosList->getElement(0).pos->y),'*');
+                playerPosList->insertHead(headInsert);
+                break;
+            }
         }
         case(RIGHT):
         {
-            headInsert = objPos((playerPosList->getElement(0).pos->x)+1,(playerPosList->getElement(0).pos->y),'*');
-            playerPosList->insertHead(headInsert);
-            break;
+            if((playerPosList->getElement(0).pos->x) == (mainGameMechsRef->getBoardSizeX()-2))
+            {
+                headInsert = objPos(1,(playerPosList->getElement(0).pos->y),'*');
+                playerPosList->insertHead(headInsert);
+                break;
+            }
+            else
+            {
+                headInsert = objPos((playerPosList->getElement(0).pos->x)+1,(playerPosList->getElement(0).pos->y),'*');
+                playerPosList->insertHead(headInsert);
+                break;
+            }
         }
         case(STOP):
             break;
     }
 
     
+}
+
+bool Player::checkLoss()
+{
+    bool valid = true; // Assume valid, check for collisions
+        for (int i = 1; i < playerPosList->getSize(); i++)
+        {
+            if (playerPosList->getElement(0).pos->x == playerPosList->getElement(i).pos->x && playerPosList->getElement(0).pos->y == playerPosList->getElement(i).pos->y)
+            {
+                valid = false; // Collision detected, retry
+                break;
+            }
+        }
+    return valid;
 }
 
 

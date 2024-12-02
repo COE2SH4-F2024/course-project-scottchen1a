@@ -33,7 +33,7 @@ int main(void)
 
     Initialize();
 
-    while(board->getExitFlagStatus() == false)  
+    while((board->getExitFlagStatus() == false))  
     {
         GetInput();
         RunLogic();
@@ -89,6 +89,12 @@ void RunLogic(void)
     p->updatePlayerDir();
     p->movePlayer();
 
+    if (!p->checkLoss())
+    {   
+        board->setLoseFlag();
+        board->setExitTrue();
+    }
+    
     if (p->checkFoodConsumption())
     {
         board->incrementScore();
@@ -182,27 +188,30 @@ void DrawScreen(void)
         MacUILib_printf("\n");
     }
 
+    if(board->getLoseFlagStatus())
+    {   
+        MacUILib_Delay(1000000);
+        MacUILib_clearScreen();
+        MacUILib_Delay(1000000);
+        MacUILib_printf("\n");
+        MacUILib_printf("##################################\n\n");
+        MacUILib_printf("     YOU LOSE!!! TRY AGAIN D:\n\n");
+        MacUILib_printf("##################################");
+        MacUILib_Delay(1000000);
+    }
 
+    if((board->getExitFlagStatus()) && !(board->getLoseFlagStatus()))
+    {   
+        MacUILib_Delay(1000000);
+        MacUILib_clearScreen();
+        MacUILib_Delay(1000000);
+        MacUILib_printf("\n");
+        MacUILib_printf("##################################\n\n");
+        MacUILib_printf("     DON'T BE A QUITTER >:(\n\n");
+        MacUILib_printf("##################################");
+        MacUILib_Delay(1000000);
+    }
 
-    // UI Information
-
-    // printf("Score: %d\n", body.getSize()-1); // Score
-        
-    // MacUILib_printf("Board Size: 15 x 30 \n");
-
- 
-    
-    // // Printing Game Loss Condiiton
-    // if(loseFlag == 1)
-    // {
-        
-    //     exitFlag = myGame.getExitFlagStatus();
-    //     MacUILib_clearScreen();
-
-    //     MacUILib_printf("Your Score was: %d\n", body.getSize()-1);
-
-
-    // }
 
 
 }
