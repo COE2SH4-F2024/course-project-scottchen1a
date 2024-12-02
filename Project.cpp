@@ -10,10 +10,11 @@
 
 using namespace std;
 
-#define DELAY_CONST 100000
+#define DELAY_CONST 100000//delay constant
 
 bool exitFlag;
 
+//function prototypes
 void Initialize(void);
 void GetInput(void);
 void RunLogic(void);
@@ -21,6 +22,7 @@ void DrawScreen(void);
 void LoopDelay(void);
 void CleanUp(void);
 
+//pointers for game objects
 GameMechs *board;
 Player *p;
 Food *f;
@@ -52,10 +54,10 @@ void Initialize(void)
     MacUILib_clearScreen();
 
     //Creates all objects needed for runtime on the heap
-    board = new GameMechs();
-    f = new Food(board);
-    p = new Player(board,f);
-    f->generateFood(p->getPlayerPos());
+    board = new GameMechs(); //Create a new GameMechs object
+    f = new Food(board);// Create a new Food object, passing the board reference
+    p = new Player(board,f);// Create a new Player object, passing the board and food references
+    f->generateFood(p->getPlayerPos()); // Generate initial food position based on player position
     //---------------------
 
     //Makes an array for the gameboard depening on the constuctor used
@@ -66,12 +68,12 @@ void Initialize(void)
 
 void GetInput(void)
 {
-    int tempInp = 0;
+    int tempInp = 0; // Temporary variable to hold input
     if (MacUILib_hasChar())
     {
         tempInp = MacUILib_getChar();
     }
-    board->setInput(tempInp);
+    board->setInput(tempInp); // Set the input in the board object
 }
 
 void RunLogic(void)
@@ -81,26 +83,28 @@ void RunLogic(void)
         case 'q': //debug key for incrementing score
             board->incrementScore();
             break;
-        case 'f':
+        case 'f': //key for generating food
             f->generateFood(p->getPlayerPos());
             break;
     }
 
-    p->updatePlayerDir();
-    p->movePlayer();
+    p->updatePlayerDir();// Update player direction based on input
+    p->movePlayer();// Move the player based on direction
 
+    // Check if the player has lost the game
     if (!p->checkLoss())
     {   
-        board->setLoseFlag();
-        board->setExitTrue();
+        board->setLoseFlag(); // Set the lose flag in the board
+        board->setExitTrue(); // Set the exit flag to true
     }
     
+    // Check if the player has consumed food
     if (p->checkFoodConsumption())
     {
         board->incrementScore();
         p->addLength();
 
-        f->generateFood(p->getPlayerPos());
+        f->generateFood(p->getPlayerPos());// Generate new food at player's position
 
     }
 
@@ -119,8 +123,8 @@ void DrawScreen(void)
 
    
     // MacUILib_printf("W = Up, A = Left, S = Down, D = Right, SPACE = Stop");
-    objPos head = p->getPlayerPos().getHeadElement();
-    objPos food = f->getFoodPos();
+    objPos head = p->getPlayerPos().getHeadElement(); // Get the head position of the player
+    objPos food = f->getFoodPos(); // Get the position of the food
 
     // Debugging
     MacUILib_printf("Head Position: (%d, %d)\n", head.pos->x, head.pos->y);
@@ -161,6 +165,7 @@ void DrawScreen(void)
                 gameBoard[row][column] = ' ';
             }
 
+            // Check for player positions and populate accordingly
             for (int i = 0; i < p->getPlayerPos().getSize(); i++) 
             {                
                
@@ -188,6 +193,7 @@ void DrawScreen(void)
         MacUILib_printf("\n");
     }
 
+    //checks if player has lost
     if(board->getLoseFlagStatus())
     {   
         MacUILib_Delay(1000000);
@@ -200,6 +206,7 @@ void DrawScreen(void)
         MacUILib_Delay(1000000);
     }
 
+    //checks if the game has been exited without losing
     if((board->getExitFlagStatus()) && !(board->getLoseFlagStatus()))
     {   
         MacUILib_Delay(1000000);
@@ -216,6 +223,7 @@ void DrawScreen(void)
 
 }
 
+//delay
 void LoopDelay(void)
 {
     MacUILib_Delay(DELAY_CONST); // 0.1s delay
@@ -229,16 +237,16 @@ void CleanUp(void)
     MacUILib_uninit();
     //Deletion of gameboard
     // Store board dimensions before deleting board
-    int boardSizeY = board->getBoardSizeY();
+    int boardSizeY = board->getBoardSizeY();//height of board
 
     // Deletion of gameboard
     for (int i = 0; i < boardSizeY; i++) 
     {
-        delete[] gameBoard[i];
+        delete[] gameBoard[i]; //delete each row of the game board
     }
-    delete[] gameBoard;
+    delete[] gameBoard; // Delete the game board array itself
 
-    delete p;
+    delete p; //deletes player, food, and gamemechs objects
     delete f;
     delete board;
 }
