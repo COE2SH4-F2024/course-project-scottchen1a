@@ -10,7 +10,6 @@ objPosArrayList::objPosArrayList()
 objPosArrayList::~objPosArrayList()
 {
     delete[] aList;//deallocate memory for the array list
-    //aList = nullptr;
 }
 
 //return current list size
@@ -24,7 +23,6 @@ void objPosArrayList::insertHead(objPos thisPos)
 {
     if (listSize == ARRAY_MAX_CAP)
     {
-        // Optionally resize the array here
         return;
     }
 

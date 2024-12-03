@@ -33,7 +33,7 @@ void Food::generateFood(const objPosArrayList& blockOff)
 
     while (!valid)
     {
-        randX = (rand() % (maxX - 2)) + 1;//random coordinates between 1 and maxY - 1
+        randX = (rand() % (maxX - 2)) + 1;//random coordinates between 1 and max - 1
         randY = (rand() % (maxY - 2)) + 1;
 
         valid = true; // Assume valid, check for collisions

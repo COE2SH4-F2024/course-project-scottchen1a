@@ -12,40 +12,18 @@ Player::Player(GameMechs* thisGMRef, Food* food)
     f = food;// Reference to the food object
     headInsert = objPos(15,5,'*');// Create the initial head position of the player
     playerPosList->insertHead(headInsert);// Insert the head position into the player position list
-    // playerPos.pos->x = 10;
-    // playerPos.pos->y = 5;
-    // player.symbol = '*';
-    // more actions to be included
+    
 }
 
 //destructor
 Player::~Player()
 {
-    //delete mainGameMechsRef;
+    
     delete playerPosList; 
     playerPosList = nullptr;
-    //delete[] playerPos;
+    
     // delete any heap members here
 }
-
-
-
-
-//add copy constructor and assignment operator
-
-// //Copy Constructor
-// Player::Player(const Player& p)
-// {
-//     playerPos = new objPos;
-
-// }
-
-// //Copy Assignment Operator
-// Player& Player::operator=(const Player& p)
-// {
-
-// }
-
 
 
 objPosArrayList& Player::getPlayerPos() const
@@ -292,6 +270,7 @@ bool Player::checkLoss()
                 valid = false; // Collision detected, retry
                 break;
             }
+
         }
     return valid;
 }

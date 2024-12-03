@@ -78,15 +78,6 @@ void GetInput(void)
 
 void RunLogic(void)
 {
-    switch(board->getInput())
-    {
-        case 'q': //debug key for incrementing score
-            board->incrementScore();
-            break;
-        case 'f': //key for generating food
-            f->generateFood(p->getPlayerPos());
-            break;
-    }
 
     p->updatePlayerDir();// Update player direction based on input
     p->movePlayer();// Move the player based on direction
@@ -122,17 +113,11 @@ void DrawScreen(void)
     // int i, j;
 
    
-    // MacUILib_printf("W = Up, A = Left, S = Down, D = Right, SPACE = Stop");
-    objPos head = p->getPlayerPos().getHeadElement(); // Get the head position of the player
+    
+   
     objPos food = f->getFoodPos(); // Get the position of the food
 
-    // Debugging
-    MacUILib_printf("Head Position: (%d, %d)\n", head.pos->x, head.pos->y);
-    MacUILib_printf("Food Position: (%d, %d)\n", food.pos->x, food.pos->y);
-    MacUILib_printf("\nScore: %d", board->getScore());
-    MacUILib_printf("\nFood Position: %d %d", f->getFoodPos().pos->x, f->getFoodPos().pos->y);
-    MacUILib_printf("\nPlayer Position : %d %d", p->getPlayerPos().getElement(0).getObjPos().pos->x,p->getPlayerPos().getElement(0).getObjPos().pos->y);
-    MacUILib_printf("\n");
+    
 
     // Populating Game Board
     for (int row = 0; row < board->getBoardSizeY(); row++)
@@ -193,30 +178,37 @@ void DrawScreen(void)
         MacUILib_printf("\n");
     }
 
+    //UI
+    
+    MacUILib_printf("\n\nScore: %d\n", board->getScore());
+    MacUILib_printf("\nW = Up, A = Left, S = Down, D = Right, SPACE = Stop\n");
+    MacUILib_printf("\nFood Position: (%d, %d)\n", food.pos->x, food.pos->y);
+   
+
     //checks if player has lost
     if(board->getLoseFlagStatus())
     {   
-        MacUILib_Delay(1000000);
+        MacUILib_Delay(500000);
         MacUILib_clearScreen();
-        MacUILib_Delay(1000000);
+        MacUILib_Delay(500000);
         MacUILib_printf("\n");
         MacUILib_printf("##################################\n\n");
         MacUILib_printf("     YOU LOSE!!! TRY AGAIN D:\n\n");
         MacUILib_printf("##################################");
-        MacUILib_Delay(1000000);
+        MacUILib_Delay(1500000);
     }
 
     //checks if the game has been exited without losing
     if((board->getExitFlagStatus()) && !(board->getLoseFlagStatus()))
     {   
-        MacUILib_Delay(1000000);
+        MacUILib_Delay(500000);
         MacUILib_clearScreen();
-        MacUILib_Delay(1000000);
+        MacUILib_Delay(500000);
         MacUILib_printf("\n");
         MacUILib_printf("##################################\n\n");
         MacUILib_printf("     DON'T BE A QUITTER >:(\n\n");
         MacUILib_printf("##################################");
-        MacUILib_Delay(1000000);
+        MacUILib_Delay(1500000);
     }
 
 
